@@ -188,16 +188,19 @@ app.delete('/api/people/:personId', (req, res) => {
 });
 
 //---------------- AUTHENTICATION/AUTHORIZATION ----------------------//
-const checkCredentials = properties.get('auth.app')
+const checkCredentials = properties.get('auth.login')
 
 //GET: VERIFY USER CREDENTIALS
-app.get('/api/auth/check', (req, res) => {
+app.post('/api/auth/login', (req, res) => {
+  console.log('checking')
+  console.log(req)
+  
   db.one(checkCredentials, ['curena', 'tesdt123'])
     .then(function (data) {
       // success;
       console.log('credential check returned: ' +  data)
       res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(data));
+      res.send(JSON.stringify(data)); 
     })
     .catch(function (error) {
       // error;

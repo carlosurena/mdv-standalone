@@ -25,7 +25,7 @@ CREATE table users(
     username varchar(50) not null,
     password varchar(50) not null,
     auth_status varchar(50) not null,
-    oath_provider varchar(50),
+    oauth_provider varchar(50),
     photourl varchar(255),
     person_id int not null REFERENCES people(person_id),
     last_login_dt timestamp,

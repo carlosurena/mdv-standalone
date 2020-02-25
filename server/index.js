@@ -41,7 +41,7 @@ app.use(pino);
 //---------------- USER ACCOUNTS ----------------------//
 const getAllUsers = properties.get('user.get.all')
 const getUser = properties.get('user.get.one')
-const createUser = properties.get('user.create.one')
+const createUser = properties.get('user.create.one.mysql')
 const deleteUser = properties.get('user.delete.one')
 
 
@@ -72,7 +72,8 @@ app.get('/api/accounts', (req, res) => {
 
 //POST: create new user account
 app.post('/api/accounts', (req, res) => {
-  db.query(createUser, (err, results, []) =>{
+  const data = {email: 'carlos@testEmail.com', username: 'curena', password: 'test123', auth_status : 'pending', oauth_provider: null, photourl: null, person_id : 1, active: true, created_by: 'SYSTEM', updated_by: 'SYSTEM'}
+  db.query(createUser, data, (err, results) =>{
     if(err) throw err;
     //console.log(results.user_id); // print new account id;
     console.log('done')

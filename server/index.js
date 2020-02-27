@@ -18,7 +18,9 @@ const cn = {
 var db = pgp(cn)
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.use(bodyParser.json());
 app.use(pino);
 
 
@@ -33,7 +35,6 @@ app.get('/api/greeting', (req, res) => {
 const getAllUsers = properties.get('user.get.all')
 const getUser = properties.get('user.get.one')
 const createUser = properties.get('user.create.one')
-const updateUser = properties.get('user.update.field.one')
 const deleteUser = properties.get('user.delete.one')
 
 
@@ -187,19 +188,37 @@ app.get('/api/people/:personId', (req, res) => {
 
 //POST: create new Person
 app.post('/api/people', (req, res) => {
-  db.one(createPerson, ['Carlos', 'E', 'Ureña', 'M', new Date(), 'carlosurenajr@gmail.com', '89 Leonard Dr.', 'Bridgeport', 'CT', '2035227369', 'visitor', null, 10, null, null, 'SYSTEM', 'SYSTEM'])
+  const data = req.body;
+  console.log(data)
+  var responseMsg = '';
+  var requester = 'curena';
+  db.one(createPerson, [data.first_name, data.middle_name, data.last_name, data.gender, data.birthdate, data.email, data.address, data.city, data.state, data.phone, data.member_type, data.allergies, data.grade, data.nickname, null, requester, requester])
     .then(data => {
-      console.log("person created, id: " + data.person_id); // print new account id;
+      console.log("person created, id: " + data.person_id); // print new person id;
+      responseMsg = 'Person created Successfully!';
     })
     .catch(error => {
       if (error.code == 23505) {
         //UNIQUE CONSTRAINT VIOLATION
-        console.log('ACCOUNT ALREADY EXISTS');
+        console.log('PERSON ALREADY EXISTS');
+        res.status(400);
+        responseMsg = 'This person already exists.'
+      } else if (error.code == 23502) {
+        //UNIQUE CONSTRAINT VIOLATION
+        console.log('MISSING REQUIRED FIELD');
+        res.status(400);
+        responseMsg = 'A required field is missing.'
       } else {
         console.log('ERROR:', error); // print error;
+        res.status(400);
+        responseMsg = 'An error occurred while creating this person. Please try again later.'
+
       }
+    }).then(() => {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({ response: responseMsg }));
     });
-  res.send();
+
 });
 
 //PUT: update PERSON -- wip

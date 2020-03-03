@@ -1,3 +1,11 @@
+--
+DROP TABLE people cascade;
+DROP TABLE users cascade;
+DROP TABLE mdv_events cascade;
+DROP TABLE mdv_locations cascade;
+DROP TABLE mdv_sheets cascade;
+DROP TABLE mdv_attendee_entries cascade;
+
 --POSTGRESQL
 CREATE table people(
    	person_id SERIAL PRIMARY KEY,
@@ -25,8 +33,8 @@ CREATE table people(
 CREATE table users(
    	user_id SERIAL PRIMARY KEY,
     email varchar(50) unique not null,
-    username varchar(50) not null,
-    password varchar(50) not null,
+    username varchar(50),
+    password varchar(255) not null,
     auth_status varchar(50) not null,
     oauth_provider varchar(50),
     photourl varchar(255),
@@ -86,7 +94,7 @@ CREATE table mdv_attendee_entries(
     updated_by varchar(50) not null
     );
     
---MYSQL
+-------------------------------------MYSQL
 CREATE table people(
    	person_id int AUTO_INCREMENT PRIMARY KEY,
     first_name varchar(50) not null,

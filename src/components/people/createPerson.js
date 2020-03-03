@@ -3,20 +3,20 @@ import React, { useState } from 'react';
 function CreatePerson() {
 
     const [personData, setPersonData] = useState({
-        first_name: null,
-        middle_name: null,
-        last_name: null,
-        gender: null,
-        birthdate: null,
-        email: null,
-        address: null,
-        city: null,
-        state: null,
-        phone: null,
-        member_type: null,
-        allergies: null,
-        grade: null,
-        nickname: null
+        first_name: '',
+        middle_name: '',
+        last_name: '',
+        gender: '',
+        birthdate: '',
+        email: '',
+        address: '',
+        city: '',
+        state: '',
+        phone: '',
+        member_type: '',
+        allergies: '',
+        grade: '',
+        nickname: ''
     });
 
     const [response, setResponse] = useState('');

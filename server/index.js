@@ -3,7 +3,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 const pgp = require('pg-promise')();
+const bcrypt = require("bcryptjs");
+
+require('./config/passport')
 var PropertiesReader = require('properties-reader');
+
 var properties = PropertiesReader('./server/application.properties');
 
 
@@ -18,17 +22,58 @@ const cn = {
 var db = pgp(cn)
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(pino);
-
+// const auth = require('./server/routes/auth');
+// app.use('/auth', auth);
 
 //test req
 app.get('/api/greeting', (req, res) => {
   const name = req.query.name || 'World';
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
+});
+
+
+
+//---------------- AUTHENTICATION/AUTHORIZATION ----------------------//
+app.post('/api/login', (req, res) => {
+  console.log(req.body.email, req.body.password);
+
+});
+
+app.post('/api/register', (req, res) => {
+  console.log(req.body.username, req.body.password);
+  const [email, username, password, auth_status, oauth_provider, photourl, person_id, active, last_login_date, created_by, updated_by] = req.body;
+  bcrypt.genSalt(10, (err, salt) => {
+    if(err){
+      console.log("error generating salt", err);
+    }
+    bcrypt.hash(password, salt, (err, hash) => {
+      if(err){
+        console.log("error applying hash", err);
+      }
+      db.one(createUser, [email, username, hash, auth_status, oauth_provider, photourl, person_id, active, last_login_date, created_by, updated_by])
+        .then(data => {
+          console.log(data.user_id); // print new account id;
+          res.send(data.user_id);
+
+        })
+        .catch(error => {
+          if (error.code == 23505) {
+            //UNIQUE CONSTRAINT VIOLATION
+            console.log('USER ALREADY EXISTS');
+            res.status(400).send(JSON.stringify({ 'response': 'USER ALREADY EXISTS' }));
+          } else {
+            console.log('ERROR:', error); // print error;
+            res.status(400).send(JSON.stringify({ 'response': 'ERROR' }));
+          }
+        });
+    })
+  })
+
+
 });
 
 //---------------- USER ACCOUNTS ----------------------//
@@ -66,7 +111,6 @@ app.get('/api/users/:uid', (req, res) => {
     });
 });
 
-
 //POST: create new user account
 app.post('/api/users', (req, res) => {
   db.one(createUser, ['carlos@testEmail.com', 'curena', 'test123', 'pending', null, null, 2, true, 'SYSTEM', 'SYSTEM'])
@@ -86,6 +130,8 @@ app.post('/api/users', (req, res) => {
       }
     });
 });
+
+
 
 //PUT: update User Account -- wip
 app.put('/api/users/:uid', (req, res) => {
@@ -284,26 +330,7 @@ app.delete('/api/people/:personId', (req, res) => {
     });
 });
 
-//---------------- AUTHENTICATION/AUTHORIZATION ----------------------//
-const checkCredentials = properties.get('auth.login')
 
-//GET: VERIFY USER CREDENTIALS
-app.post('/api/auth/login', (req, res) => {
-  console.log('checking')
-  console.log(req)
-
-  db.one(checkCredentials, ['curena', 'tesdt123'])
-    .then(function (data) {
-      // success;
-      console.log('credential check returned: ' + data)
-      res.setHeader('Content-Type', 'application/json');
-      res.send(JSON.stringify(data));
-    })
-    .catch(function (error) {
-      // error;
-      console.log('error verifying accounts', error)
-    });
-});
 
 //------------------------------------------------------------------------//
 //---------------------------------CHECK-INS------------------------------//

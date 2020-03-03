@@ -2,42 +2,44 @@ import React, { useState } from 'react';
 
 function Login() {
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [status, setStatus] = useState('');
+    const [credentials, setCredentials] = useState({
+        email : '',
+        password : '' 
+    })
+    const [response, setResponse] = useState('');
 
     const handleSubmit = (event) => {
-        const credentials = {'username' : username, 'password' : password};
         event.preventDefault();
-        fetch(`/api/auth/check`, {
+        fetch(`/api/login`, {
             method: 'post',
-            body: credentials,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(credentials),
         })
-            .then(response => response.json())
-            .then(data => setStatus(data.status));
+            .then(response =>  response.json(), error => console.log('An error oocurred', error))
+            .then(data =>  setResponse(data.response) );
     }
     return (
         <div>
             Login
             <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Username: </label>
+                <label htmlFor="email">Email: </label>
                 <input
-                    id="username"
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    id="email"
+                    type="email"
+                    value={credentials.email}
+                    onChange={(e) => setCredentials({...credentials, email: e.target.value})}
                 />
 
                 <label htmlFor="name">Password: </label>
                 <input
                     id="password"
                     type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    value={credentials.password}
+                    onChange={(e) => setCredentials({...credentials, password : e.target.value})}
                 />
                 <button type="submit">Submit</button>
             </form>
-            {status}
+            {response}
         </div>
     );
 }

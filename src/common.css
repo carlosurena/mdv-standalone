@@ -1,0 +1,14 @@
+@import '~antd/dist/antd.css';
+
+body{
+  width: 100%;
+}
+
+.border{
+  border: 1px solid violet;
+}
+
+.logoContainer{
+  min-height: 40px;
+  background-color: wheat;
+}

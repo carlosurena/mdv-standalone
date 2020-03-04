@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-
-function PersonTable() {
-
+import { useDispatch, useSelector } from 'react-redux';
+function People() {
+    const dispatch = useDispatch();
+    const peopleData = useSelector((state) => state.people.data);
+    
     const [response, setResponse] = useState('');
     const [statusMsg, setStatusMsg] = useState('retrieving..');
 
@@ -41,4 +43,4 @@ function PersonTable() {
     );
 }
 
-export default PersonTable
+export default People

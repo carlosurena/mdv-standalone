@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import ContainerPanel from '../common/containerPanel'
 function People() {
     const dispatch = useDispatch();
     const peopleData = useSelector((state) => state.people.data);
@@ -25,10 +26,7 @@ function People() {
 
 
     return (
-        <div>
-            <h1>
-                People List/Table
-            </h1>
+        <ContainerPanel size={3} title="People">
             <div>
                 {statusMsg}
             </div>
@@ -39,7 +37,7 @@ function People() {
                     )
                 })}
             </ul>
-        </div>
+        </ContainerPanel>
     );
 }
 

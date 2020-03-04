@@ -13,7 +13,7 @@ const { SubMenu } = Menu;
 
 function Nav(props) {
     const [collapsed, setCollapsed] = useState(false);
-    const [selectedItem, setSelectedItem] = useState("/");
+    const [selectedItem, setSelectedItem] = useState(props.location.pathname);
 
     const handleSelectedRoute = (path) => {
 
@@ -21,23 +21,23 @@ function Nav(props) {
     }
     return (
         <Sider theme="light" breakpoint="sm" collapsible collapsed={collapsed} onCollapse={() => setCollapsed(!collapsed)}>
-            <Menu defaultSelectedKeys={['1']} mode="inline">
-                <Menu.Item key="1" onClick={() => handleSelectedRoute("/")}>
+            <Menu defaultSelectedKeys={[selectedItem]} mode="inline">
+                <Menu.Item key="/" onClick={() => handleSelectedRoute("/")}>
                     <HomeOutlined />
                     <span>Home</span>
                 </Menu.Item>
 
-                <Menu.Item key="2" onClick={() => handleSelectedRoute("/people")}>
+                <Menu.Item key="/people" onClick={() => handleSelectedRoute("/people")}>
                     <UserOutlined />
                     <span>People</span>
                 </Menu.Item>
 
-                <Menu.Item key="3" onClick={() => handleSelectedRoute("/check-ins")}>
+                <Menu.Item key="/check-ins" onClick={() => handleSelectedRoute("/check-ins")}>
                     <ProfileOutlined />
                     <span>Check-ins</span>
                 </Menu.Item>
 
-                <Menu.Item key="4" onClick={() => handleSelectedRoute("/settings")}>
+                <Menu.Item key="/settings" onClick={() => handleSelectedRoute("/settings")}>
                     <SettingOutlined />
                     <span>Settings</span>
                 </Menu.Item>

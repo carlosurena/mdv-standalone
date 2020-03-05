@@ -1,0 +1,8 @@
+Primary
+#3FA34D - Green
+#ECBA82 - Tan Orange
+
+Shades
+#81C14B - Lime Green
+#297045 - Darker Green
+#204E4A - Very Dark Green

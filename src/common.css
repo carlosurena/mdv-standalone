@@ -12,3 +12,7 @@ body{
   min-height: 40px;
   background-color: wheat;
 }
+
+.dashButton {
+  height: 100%
+}

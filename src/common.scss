@@ -1,0 +1,64 @@
+@import "~antd/dist/antd.css";
+$font-stack: Helvetica, sans-serif;
+$primary-color: #333;
+$white: #ffffff;
+$lightGray: #f5f6fa;
+$limeGreen: #a5f26e;
+$paleGreen: #aee19f;
+$darkGreen: #75a072;
+$red: #ff3d55;
+$redSelected: #ff6e7f;
+$paleBlue: #09a0bf;
+$black: #383838;
+$none: none;
+
+body {
+  width: 100%;
+}
+
+.border {
+  border: 1px solid violet;
+}
+
+.logoContainer {
+  min-height: 40px;
+  background-color: wheat;
+}
+
+.center {
+  display: block;
+  margin: 0 auto;
+}
+
+// ---- ContainerPanel Component ----------- //
+.containerPanel {
+  border-radius: 5px;
+  height: 100%;
+  min-width: 100px;
+
+  .ant-page-header {
+    background-color: transparent;
+  }
+  .ant-page-header-heading {
+    padding: 0;
+  }
+
+  .dashButton {
+    border-radius: 5px;
+    height: 100%;
+    color: white;
+    &:hover {
+      color: white;
+      background-color: $paleGreen;
+    }
+  }
+}
+
+//---- Modal Component -------------- //
+
+.ant-modal-content {
+  border-radius: 5px;
+}
+.ant-modal-header {
+  border-radius: 5px;
+}

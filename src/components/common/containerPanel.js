@@ -1,19 +1,12 @@
-import React, { useState } from 'react';
-import { Col, PageHeader, Descriptions } from 'antd';
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Col, PageHeader } from 'antd';
 import {colors} from './theme'
 
 function ContainerPanel(props) {
 
     
     const rootStyle = {
-        backgroundColor: props.background ? (props.background) : (colors.white),
-        borderRadius: "5px",
-        height: '100%',
-        minWidth: "100px",
-        "& div" : {
-            padding: "16px 24px"
-        }
+        backgroundColor: props.background ? (props.background) : (colors.white)
     };
 
     const descStyle = {
@@ -23,8 +16,8 @@ function ContainerPanel(props) {
     };
 
     return (
-        <Col xs={24} md={props.size * 8}>
-            <div style={rootStyle}>
+        <Col xs={24} md={props.size * 8} offset={props.offset * 8}>
+            <div style={rootStyle} className="containerPanel">
                 {
                     (
                         props.title ? (

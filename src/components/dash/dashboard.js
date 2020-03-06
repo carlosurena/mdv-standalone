@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Row, Col, Button } from 'antd';
+import React from 'react';
+import { Row, Button } from 'antd';
 import {colors} from '../common/theme'
 import ContainerPanel from '../common/containerPanel';
 import {ArrowRightOutlined} from '@ant-design/icons'
@@ -12,11 +12,11 @@ function Dashboard() {
             </ContainerPanel>
 
             <ContainerPanel background={colors.paleBlue} size={1} noPadding >
-                    <Button className="dashButton" ghost block size="large">Start Attendance</Button>
+            <Button icon={<ArrowRightOutlined />} className="dashButton" type="link" block size="large">Start Attendance</Button>
             </ContainerPanel>
 
             <ContainerPanel background={colors.red} size={1} noPadding>
-            <Button icon={<ArrowRightOutlined />} className="dashButton" ghost block size="large">Start Headcount</Button>
+            <Button icon={<ArrowRightOutlined />} className="dashButton" type="link" block size="large">Start Headcount</Button>
             </ContainerPanel>
 
             <ContainerPanel size={3} title="Attendance Over Time">

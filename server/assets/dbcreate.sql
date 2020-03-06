@@ -22,7 +22,7 @@ CREATE table people(
     phone varchar(15),
     member_type varchar(50),
     allergies varchar(255),
-    grade int,
+    grade varchar(255),
     user_id int,
     created_on timestamp not null,
     created_by varchar(50) not null,

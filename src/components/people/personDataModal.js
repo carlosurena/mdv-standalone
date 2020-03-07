@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   Button,
@@ -6,7 +6,6 @@ import {
   Col,
   Form,
   Input,
-  InputNumber,
   Switch,
   DatePicker,
   Select
@@ -17,6 +16,10 @@ import {
   DownOutlined,
   UpOutlined
 } from "@ant-design/icons";
+import moment from "moment";
+
+const dateFormat = "MM/DD/YYYY";
+
 const mockStates = [
   {
     key: "CT",
@@ -138,22 +141,22 @@ const mockMemberTypes = [
   }
 ];
 
-function CreatePersonModal(props) {
+function PersonDataModal(props) {
   const [personData, setPersonData] = useState({
-    first_name: null,
-    middle_name: null,
-    last_name: null,
-    gender: null,
-    birthdate: null,
-    email: null,
-    address: null,
-    city: null,
-    state: null,
-    phone: null,
-    member_type: null,
-    allergies: null,
-    grade: null,
-    nickname: null
+    first_name: props.mode === "edit" ? props.data.first_name : null,
+    middle_name: props.mode === "edit" ? props.data.middle_name : null,
+    last_name: props.mode === "edit" ? props.data.last_name : null,
+    gender: props.mode === "edit" ? props.data.gender : "F",
+    birthdate: props.mode === "edit" ? props.data.birthdate : null,
+    email: props.mode === "edit" ? props.data.email : null,
+    address: props.mode === "edit" ? props.data.address : null,
+    city: props.mode === "edit" ? props.data.city : null,
+    state: props.mode === "edit" ? props.data.state : null,
+    phone: props.mode === "edit" ? props.data.phone : null,
+    member_type: props.mode === "edit" ? props.data.member_type : null,
+    allergies: props.mode === "edit" ? props.data.allergies : null,
+    grade: props.mode === "edit" ? props.data.grade : null,
+    nickname: props.mode === "edit" ? props.data.nickname : null
   });
 
   const [response, setResponse] = useState("");
@@ -165,31 +168,36 @@ function CreatePersonModal(props) {
     backgroundColor:
       personData.gender && personData.gender === "M" ? "#1890ff" : "pink"
   };
+
   const resetState = () => {
     setPersonData({
-      first_name: null,
-      middle_name: null,
-      last_name: null,
-      gender: "F",
-      birthdate: null,
-      email: null,
-      address: null,
-      city: null,
-      state: null,
-      phone: null,
-      member_type: null,
-      allergies: null,
-      grade: null,
-      nickname: null
+      first_name: props.mode === "edit" ? props.data.first_name : null,
+      middle_name: props.mode === "edit" ? props.data.middle_name : null,
+      last_name: props.mode === "edit" ? props.data.last_name : null,
+      gender: props.mode === "edit" ? props.data.gender : "F",
+      birthdate: props.mode === "edit" ? props.data.birthdate : null,
+      email: props.mode === "edit" ? props.data.email : null,
+      address: props.mode === "edit" ? props.data.address : null,
+      city: props.mode === "edit" ? props.data.city : null,
+      state: props.mode === "edit" ? props.data.state : null,
+      phone: props.mode === "edit" ? props.data.phone : null,
+      member_type: props.mode === "edit" ? props.data.member_type : null,
+      allergies: props.mode === "edit" ? props.data.allergies : null,
+      grade: props.mode === "edit" ? props.data.grade : null,
+      nickname: props.mode === "edit" ? props.data.nickname : null
     });
     toggleExtraFields(false);
   };
+
+  useEffect(() => {
+    resetState();
+  }, [props.data]);
   const handleCancel = () => {
     props.setModalVisibility(false);
     resetState();
     form.resetFields();
   };
-  const handleSubmit = () => {
+  const createPerson = () => {
     setLoading(true);
     console.log("submitting");
     fetch(`/api/people`, {
@@ -205,7 +213,29 @@ function CreatePersonModal(props) {
         setResponse(data.response);
         setLoading(false);
         props.setModalVisibility(false);
-        props.fetchData();
+        props.refetchData();
+        resetState();
+      });
+  };
+
+  const updatePerson = () => {
+    setLoading(true);
+    console.log("submitting");
+    fetch("/api/people/" + props.data.person_id, {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(personData)
+    })
+      .then(
+        response => response.json(),
+        error => console.log("An error oocurred", error)
+      )
+      .then(data => {
+        setResponse(data.response);
+        console.log(response);
+        setLoading(false);
+        props.setModalVisibility(false);
+        props.refetchData();
         resetState();
       });
   };
@@ -214,7 +244,7 @@ function CreatePersonModal(props) {
     <Modal
       visible={props.modalVisibility}
       title="New Person"
-      okText="Create"
+      okText={props.mode === "create" ? "Create" : "Update"}
       cancelText="Cancel"
       width="80%"
       onCancel={handleCancel}
@@ -222,7 +252,7 @@ function CreatePersonModal(props) {
         form
           .validateFields()
           .then(values => {
-            handleSubmit();
+            props.mode === "create" ? createPerson() : updatePerson();
           })
           .then(() => form.resetFields())
           .catch(info => {
@@ -234,7 +264,11 @@ function CreatePersonModal(props) {
         form={form}
         layout="vertical"
         name="form_in_modal"
-        initialValues={{ modifier: "public" }}
+        initialValues={
+          personData.birthdate && props.mode === "edit"
+            ? { ...personData, birthdate: moment(personData.birthdate) }
+            : { ...personData, birthdate: null }
+        }
       >
         <Input.Group>
           <Row gutter={8}>
@@ -259,6 +293,7 @@ function CreatePersonModal(props) {
             <Col xs={24} sm={8}>
               <Form.Item name="middle_name" label="Middle name">
                 <Input
+                  defaultValue={personData.middle_name}
                   value={personData.middle_name}
                   onChange={e => {
                     setPersonData({
@@ -276,6 +311,7 @@ function CreatePersonModal(props) {
                 rules={[{ required: true, message: "Missing last name " }]}
               >
                 <Input
+                  defaultValue={personData.last_name}
                   value={personData.last_name}
                   onChange={e => {
                     setPersonData({
@@ -294,7 +330,8 @@ function CreatePersonModal(props) {
             <Col xs={24} sm={8}>
               <Form.Item name="birthdate" label="Birthdate">
                 <DatePicker
-                  value={personData.birthdate}
+                  defaultValue={moment(personData.birthdate, dateFormat)}
+                  format={dateFormat}
                   onChange={e => {
                     setPersonData({
                       ...personData,
@@ -308,6 +345,7 @@ function CreatePersonModal(props) {
             <Col xs={24} sm={8}>
               <Form.Item type="tel" name="phone" label="Phone #">
                 <Input
+                  defaultValue={personData.phone}
                   value={personData.phone}
                   onChange={e => {
                     setPersonData({
@@ -322,7 +360,11 @@ function CreatePersonModal(props) {
             <Col xs={24} sm={8}>
               <Form.Item label="Gender">
                 <Switch
-                  defaultChecked="false"
+                  defaultChecked={
+                    personData.gender && personData.gender === "M"
+                      ? true
+                      : false
+                  }
                   checked={
                     personData.gender && personData.gender === "M"
                       ? true
@@ -346,6 +388,7 @@ function CreatePersonModal(props) {
             <Col xs={24} sm={12}>
               <Form.Item type="email" name="email" label="Email">
                 <Input
+                  defaultValue={personData.email}
                   value={personData.email}
                   onChange={e => {
                     setPersonData({
@@ -360,6 +403,7 @@ function CreatePersonModal(props) {
               <Form.Item name="member_type" label="Member Type">
                 <Select
                   placeholder="Member type"
+                  defaultValue={personData.member_type}
                   value={personData.member_type}
                   onChange={e => {
                     setPersonData({
@@ -393,6 +437,7 @@ function CreatePersonModal(props) {
                 <Col xs={24} sm={8}>
                   <Form.Item name="address" label="Address">
                     <Input
+                      defaultValue={personData.address}
                       value={personData.address}
                       onChange={e => {
                         setPersonData({
@@ -406,6 +451,7 @@ function CreatePersonModal(props) {
                 <Col xs={24} sm={8}>
                   <Form.Item name="city" label="City">
                     <Input
+                      defaultValue={personData.city}
                       value={personData.city}
                       onChange={e => {
                         setPersonData({
@@ -419,6 +465,7 @@ function CreatePersonModal(props) {
                 <Col xs={24} sm={8}>
                   <Form.Item name="state" label="State">
                     <Select
+                      defaultValue={personData.state}
                       placeholder="State"
                       value={personData.state}
                       onChange={e => {
@@ -450,6 +497,7 @@ function CreatePersonModal(props) {
                 <Col xs={24} sm={8}>
                   <Form.Item name="allergies" label="Allergies">
                     <Input
+                      defaultValue={personData.allergies}
                       value={personData.allergies}
                       onChange={e => {
                         setPersonData({
@@ -464,6 +512,7 @@ function CreatePersonModal(props) {
                   <Form.Item name="grade" label="Grade">
                     <Select
                       placeholder="Grade"
+                      defaultValue={personData.grade}
                       value={personData.grade}
                       onChange={e => {
                         setPersonData({
@@ -490,6 +539,7 @@ function CreatePersonModal(props) {
                 <Col xs={24} sm={8}>
                   <Form.Item name="nickname" label="Nickname">
                     <Input
+                      defaultValue={personData.nickname}
                       value={personData.nickname}
                       onChange={e => {
                         setPersonData({
@@ -536,4 +586,4 @@ function CreatePersonModal(props) {
   );
 }
 
-export default CreatePersonModal;
+export default PersonDataModal;

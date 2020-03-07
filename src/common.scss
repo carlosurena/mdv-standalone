@@ -22,12 +22,19 @@ body {
 
 .logoContainer {
   min-height: 40px;
-  background-color: wheat;
 }
 
 .center {
   display: block;
   margin: 0 auto;
+}
+
+.roundify {
+  border-radius: 5px;
+}
+
+.noPadding {
+  padding: 0;
 }
 
 // ---- ContainerPanel Component ----------- //
@@ -54,11 +61,33 @@ body {
   }
 }
 
-//---- Modal Component -------------- //
+//---- Global Ant-Design  Overrides -------------- //
 
+.ant-layout {
+  background-color: $lightGray;
+}
 .ant-modal-content {
   border-radius: 5px;
 }
 .ant-modal-header {
   border-radius: 5px;
+}
+
+.ant-tabs-nav-container {
+  border-radius: 5px;
+  background-color: $lightGray;
+}
+
+.ant-tabs-nav-content {
+  border-radius: 5px;
+}
+//------ Person Page ------------------//
+.personPage {
+  .male {
+    background-color: $paleBlue;
+  }
+
+  .female {
+    background-color: pink;
+  }
 }

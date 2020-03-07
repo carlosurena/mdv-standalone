@@ -1,7 +1,7 @@
 import React from "react";
 import Login from "./components/auth/login";
-import CreatePersonModal from "./components/people/createPersonModal";
 import People from "./components/people/people";
+import Person from "./components/people/person";
 import Nav from "./components/navigation/nav";
 import MainHeader from "./components/navigation/header";
 import Dashboard from "./components/dash/dashboard";
@@ -26,12 +26,11 @@ function App() {
               <Route path="/login">
                 <Login />
               </Route>
-              <Route path="/people">
+              <Route exact path="/people">
                 <People />
               </Route>
-              <Route path="/person">
-                <People />
-              </Route>
+              <Route path="/people/:id" children={<Person />} />
+
               <Route path="/">
                 <Dashboard />
               </Route>

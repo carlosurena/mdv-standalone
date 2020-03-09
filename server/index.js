@@ -4,21 +4,14 @@ const bodyParser = require("body-parser");
 const pino = require("express-pino-logger")();
 const pgp = require("pg-promise")();
 const bcrypt = require("bcryptjs");
+const config = require("./config/dbConfig");
 
 require("./config/passport");
 var PropertiesReader = require("properties-reader");
 
 var properties = PropertiesReader("./server/application.properties");
 
-const cn = {
-  host: "127.0.0.1", // 'localhost' is the default;
-  port: 5432, // 5432 is the default;
-  database: "manantial",
-  user: "postgres",
-  password: "urenafamily"
-};
-
-var db = pgp(cn);
+var db = pgp(config.cn);
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -250,7 +243,7 @@ app.get("/api/people", (req, res) => {
     })
     .catch(function(error) {
       // error;
-      console.log("error retrieving accounts", error);
+      console.log("error retrieving people", error);
     });
 });
 
@@ -264,7 +257,7 @@ app.get("/api/people/:personId", (req, res) => {
     })
     .catch(function(error) {
       // error;
-      console.log("error retrieving accounts", error);
+      console.log("error retrieving person", error);
     });
 });
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Row, Col } from "antd";
 import {
   HomeOutlined,
   UserOutlined,
@@ -26,6 +26,9 @@ function Nav(props) {
       collapsed={collapsed}
       onCollapse={() => setCollapsed(!collapsed)}
     >
+    
+                    <div className="logoContainer"></div>
+                
       <Menu defaultSelectedKeys={[selectedItem]} mode="inline">
         <Menu.Item key="/" onClick={() => handleSelectedRoute("/")}>
           <HomeOutlined />

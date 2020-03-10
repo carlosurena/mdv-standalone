@@ -231,7 +231,8 @@ function PersonDataModal(props) {
         error => console.log("An error oocurred", error)
       )
       .then(data => {
-        setResponse(data.response);
+        console.log(data)
+        //setResponse(data.response);
         console.log(response);
         setLoading(false);
         props.setModalVisibility(false);

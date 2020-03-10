@@ -1,5 +1,6 @@
 @import "~antd/dist/antd.css";
-$font-stack: Helvetica, sans-serif;
+$font-stack: Helvetica,
+sans-serif;
 $primary-color: #333;
 $white: #ffffff;
 $lightGray: #f5f6fa;
@@ -21,7 +22,7 @@ body {
 }
 
 .logoContainer {
-  min-height: 40px;
+  min-height: 64px;
 }
 
 .center {
@@ -37,6 +38,10 @@ body {
   padding: 0;
 }
 
+.container-padding {
+  padding: 24px;
+}
+
 // ---- ContainerPanel Component ----------- //
 .containerPanel {
   border-radius: 5px;
@@ -46,6 +51,7 @@ body {
   .ant-page-header {
     background-color: transparent;
   }
+
   .ant-page-header-heading {
     padding: 0;
   }
@@ -54,6 +60,7 @@ body {
     border-radius: 5px;
     height: 100%;
     color: white;
+
     &:hover {
       color: white;
       background-color: $paleGreen;
@@ -66,9 +73,11 @@ body {
 .ant-layout {
   background-color: $lightGray;
 }
+
 .ant-modal-content {
   border-radius: 5px;
 }
+
 .ant-modal-header {
   border-radius: 5px;
 }
@@ -81,6 +90,7 @@ body {
 .ant-tabs-nav-content {
   border-radius: 5px;
 }
+
 //------ Person Page ------------------//
 .personPage {
   .male {
@@ -90,4 +100,17 @@ body {
   .female {
     background-color: pink;
   }
+}
+
+
+// ----- Check-In Station ------------ //
+
+.station {
+  background-color: $darkGreen;
+}
+
+.checkin-header {
+  background-color: $paleGreen;
+  width: 100%;
+  min-height: 60px;
 }

@@ -3,8 +3,7 @@ import { Row } from "antd";
 import ContainerPanel from "../common/containerPanel";
 import PersonHeaderPanel from "./personHeaderPanel";
 import InfoPanel from "./infoPanel";
-import { useParams } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 function Person() {
   const { id } = useParams();
@@ -17,6 +16,10 @@ function Person() {
   useEffect(() => {
     fetchPerson();
   }, []);
+
+  useEffect(() => {
+    fetchPerson();
+  }, [id]);
 
   async function fetchPerson() {
     console.log("get req, modal close");
@@ -73,7 +76,7 @@ function Person() {
   };
 
   return (
-    <Row className="personPage" gutter={[16, 16]}>
+    <Row className="personPage container-padding" gutter={[16, 16]}>
       {personData && !loading ? (
         <>
           <ContainerPanel size={3}>

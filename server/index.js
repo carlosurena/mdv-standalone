@@ -393,6 +393,25 @@ app.delete("/api/people/:personId", (req, res) => {
 
 //---------------- SHEETS ----------------------//
 
+//------------------------------------------------------------------------//
+//---------------------------------ASSETS------------------------------//
+//------------------------------------------------------------------------//
+const getUpcomingBirthdays = properties.get("query.get.upcomingBirthdays");
+
+//GET: all birthdays in the next month
+app.get("/api/assets/birthdays", (req, res) => {
+  db.any(getUpcomingBirthdays)
+    .then(function(data) {
+      // success;
+      res.setHeader("Content-Type", "application/json");
+      res.send(JSON.stringify(data));
+    })
+    .catch(function(error) {
+      // error;
+      console.log("error retrieving birthdays", error);
+    });
+});
+
 app.listen(3001, () =>
   console.log("Express server is running on localhost:3001")
 );

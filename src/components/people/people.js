@@ -1,50 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 // import { useDispatch, useSelector } from 'react-redux';
-import ContainerPanel from '../common/containerPanel';
-import { Table, Row, Col, Button, Modal } from 'antd';
-import PersonDataModal from './personDataModal';
-import { PlusOutlined } from '@ant-design/icons';
-import { colors } from '../common/theme';
-import { useHistory } from 'react-router-dom';
+import ContainerPanel from "../common/containerPanel";
+import { Table, Row, Col, Button, Modal } from "antd";
+import PersonDataModal from "./personDataModal";
+import { PlusOutlined } from "@ant-design/icons";
+import { colors } from "../common/theme";
+import { useHistory } from "react-router-dom";
 const columns = [
   {
-    title: 'First Name',
-    dataIndex: 'first_name',
-    key: 'first_name',
+    title: "First Name",
+    dataIndex: "first_name",
+    key: "first_name",
     sorter: (a, b) => {
       return a.first_name.localeCompare(b.first_name);
     },
-    sortDirections: ['descend', 'ascend']
+    sortDirections: ["descend", "ascend"]
   },
   {
-    title: 'Last Name',
-    dataIndex: 'last_name',
-    key: 'last_name',
+    title: "Last Name",
+    dataIndex: "last_name",
+    key: "last_name",
     sorter: (a, b) => {
       return a.last_name.localeCompare(b.last_name);
     },
-    sortDirections: ['descend', 'ascend']
+    sortDirections: ["descend", "ascend"]
   },
   {
-    title: 'Gender',
-    dataIndex: 'gender',
-    key: 'gender',
+    title: "Gender",
+    dataIndex: "gender",
+    key: "gender",
     sorter: (a, b) => {
       return a.gender.localeCompare(b.gender);
     },
-    sortDirections: ['descend', 'ascend']
+    sortDirections: ["descend", "ascend"]
   },
   {
-    title: 'Phone',
-    dataIndex: 'phone',
-    key: 'phone'
+    title: "Phone",
+    dataIndex: "phone",
+    key: "phone"
   }
 ];
 
 function People(props) {
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [statusMsg, setStatusMsg] = useState('retrieving..');
+  const [statusMsg, setStatusMsg] = useState("retrieving..");
   const [modalVisibility, setModalVisibility] = useState(false);
   let history = useHistory();
   useEffect(() => {
@@ -53,44 +53,46 @@ function People(props) {
 
   async function fetchPeople() {
     setModalVisibility(false);
-    console.log('modal close');
-    const res = await fetch('/api/people');
+    console.log("modal close");
+    const res = await fetch("/api/people");
     res
       .json()
       .then(res => {
-        setStatusMsg('done!');
+        setStatusMsg("done!");
         setLoading(false);
         setResponse(res);
       })
       .catch(err => {
-        setStatusMsg('There was an error retrieving the data. Please try again.');
+        setStatusMsg(
+          "There was an error retrieving the data. Please try again."
+        );
         setLoading(false);
       });
   }
   const createPerson = personData => {
     setLoading(true);
-    console.log('submitting');
+    console.log("submitting");
     fetch(`/api/people`, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
+      method: "post",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(personData)
     })
       .then(
         response => response.json(),
-        error => console.log('An error oocurred', error)
+        error => console.log("An error oocurred", error)
       )
       .then(data => {
         console.log(data);
         // setResponse(data.response);
         setLoading(false);
         setModalVisibility(false);
-        console.log('modal close');
+        console.log("modal close");
         fetchPeople();
       });
   };
 
   const onRowClick = record => {
-    history.push('/people/' + record.person_id);
+    history.push("/people/" + record.person_id);
   };
 
   return (
@@ -101,7 +103,6 @@ function People(props) {
           <Button
             onClick={() => {
               setModalVisibility(true);
-              console.log('modal open');
             }}
             icon={<PlusOutlined />}
             className="dashButton"

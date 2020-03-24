@@ -1,149 +1,36 @@
-import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Button,
-  Row,
-  Col,
-  Form,
-  Input,
-  Switch,
-  DatePicker,
-  Select
-} from "antd";
-import {
-  ManOutlined,
-  WomanOutlined,
-  DownOutlined,
-  UpOutlined
-} from "@ant-design/icons";
-import moment from "moment";
+import React, { useState, useEffect } from 'react';
+import { Modal, Button, Row, Col, Form, Input, Switch, DatePicker, Select } from 'antd';
+import { ManOutlined, WomanOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
 
-const dateFormat = "MM/DD/YYYY";
+import moment from 'moment';
 
-const mockStates = [
-  {
-    key: "CT",
-    label: "Connecticut"
-  },
-  {
-    key: "NY",
-    label: "New York"
-  },
-  {
-    key: "MA",
-    label: "Massachussets"
-  },
-  {
-    key: "NJ",
-    label: "New Jersey"
-  },
-  {
-    key: "RI",
-    label: "Rhode Island"
-  }
-];
+const dateFormat = 'MM/DD/YYYY';
 
-const mockGrades = [
+const mockEvents = [
   {
-    key: "daycare",
-    label: "Daycare"
+    key: 'PowerKids Sunday School',
+    label: 'PowerKids Sunday School'
   },
   {
-    key: "pre-school",
-    label: "Pre-School"
+    key: 'PowerKids Wednesday',
+    label: 'PowerKids Wednesday'
   },
   {
-    key: "kindergarten",
-    label: "Kindergarten"
-  },
-  {
-    key: "1",
-    label: "1st"
-  },
-  {
-    key: "2",
-    label: "2nd"
-  },
-  {
-    key: "3",
-    label: "3rd"
-  },
-  {
-    key: "4",
-    label: "4th"
-  },
-  {
-    key: "5",
-    label: "5th"
-  },
-  {
-    key: "6",
-    label: "6th"
-  },
-  {
-    key: "7",
-    label: "7th"
-  },
-  {
-    key: "8",
-    label: "8th"
-  },
-  {
-    key: "9",
-    label: "9th"
-  },
-  {
-    key: "10",
-    label: "10th"
-  },
-  {
-    key: "11",
-    label: "11th"
-  },
-  {
-    key: "12",
-    label: "12th"
-  },
-  {
-    key: "college",
-    label: "College"
-  },
-  {
-    key: "graduated",
-    label: "Graduated"
-  },
-  {
-    key: "not_finished",
-    label: "Did not Finish"
-  }
-];
-
-const mockMemberTypes = [
-  {
-    key: "visitor",
-    label: "Visitor"
-  },
-  {
-    key: "frequent_visitor",
-    label: "Frequent Visitor"
-  },
-  {
-    key: "member",
-    label: "Member"
-  },
-  {
-    key: "active_member",
-    label: "Active Member"
-  },
-  {
-    key: "former_member",
-    label: "Former Member"
+    key: 'Dscipleship Wednesday',
+    label: 'Massachussets'
   }
 ];
 
 function CheckinsOptionsModal(props) {
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
+
+  const [checkinsValues, setCheckinsValues] = useState({
+    event_type: 'PowerKids Sunday School',
+    event_date: new Date()
+  });
   const [form] = Form.useForm();
   const { Option } = Select;
 
@@ -170,25 +57,50 @@ function CheckinsOptionsModal(props) {
         form
           .validateFields()
           .then(values => {
-            console.log("api req here");
+            console.log('api req here');
+            history.push('/check-ins/station');
           })
           .then(() => form.resetFields())
           .catch(info => {
-            console.log("Validate Failed:", info);
+            console.log('Validate Failed:', info);
           });
       }}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        name="form_in_modal"
-        initialValues={null}
-      >
+      <Form form={form} layout="vertical" name="form_in_modal" initialValues={null}>
         <Input.Group>
           <Row gutter={8}>
-            <Col xs={24} sm={8}></Col>
-            <Col xs={24} sm={8}></Col>
-            <Col xs={24} sm={8}></Col>
+            <Col xs={24} sm={12}>
+              <Form.Item name="event_type" label="Event">
+                <Select
+                  placeholder="Event"
+                  defaultValue={checkinsValues.event_type}
+                  onChange={e => {
+                    console.log('event change');
+                  }}
+                >
+                  {mockEvents &&
+                    mockEvents.map(event => {
+                      return (
+                        <Option key={event.key} value={event.key} label={event.label}>
+                          {event.label}
+                        </Option>
+                      );
+                    })}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12}>
+              <Form.Item name="date" label="Event Date">
+                <DatePicker
+                  defaultValue={moment(checkinsValues.event_date)}
+                  format={dateFormat}
+                  onChange={e => {
+                    console.log('date change');
+                  }}
+                  className="center"
+                />
+              </Form.Item>
+            </Col>
           </Row>
         </Input.Group>
         <Input.Group>
@@ -199,27 +111,8 @@ function CheckinsOptionsModal(props) {
             <Col xs={24} sm={8}></Col>
           </Row>
         </Input.Group>
-        <Input.Group>
-          <Row gutter={8}>
-            <Col xs={24} sm={12}></Col>
-            <Col xs={24} sm={12}></Col>
-          </Row>
-        </Input.Group>
+
         <div>
-          <Input.Group>
-            <Row gutter={8}>
-              <Col xs={24} sm={8}></Col>
-              <Col xs={24} sm={8}></Col>
-              <Col xs={24} sm={8}></Col>
-            </Row>
-          </Input.Group>
-          <Input.Group>
-            <Row gutter={8}>
-              <Col xs={24} sm={8}></Col>
-              <Col xs={24} sm={8}></Col>
-              <Col xs={24} sm={8}></Col>
-            </Row>
-          </Input.Group>
           <Row justify="center">
             <Col xs={24}></Col>
           </Row>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Input, AutoComplete } from "antd";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Input, AutoComplete } from 'antd';
+import { useHistory } from 'react-router-dom';
 const mockVal = (str, repeat = 1) => ({
   value: str.repeat(repeat)
 });
@@ -10,7 +10,7 @@ function Searchbar() {
   const [reshapedOptions, setReshapedOptions] = useState(null);
   const [response, setResponse] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const history = useHistory();
   useEffect(() => {
     fetchPeople();
@@ -18,7 +18,7 @@ function Searchbar() {
 
   const fetchPeople = async () => {
     setLoading(true);
-    const res = await fetch("/api/people");
+    const res = await fetch('/api/people');
     res
       .json()
       .then(res => {
@@ -29,7 +29,7 @@ function Searchbar() {
           reshape.push({
             ...person,
             value: person.person_id,
-            label: person.first_name + " " + person.last_name
+            label: person.first_name + ' ' + person.last_name
           });
         });
         setReshapedOptions(reshape);
@@ -58,8 +58,8 @@ function Searchbar() {
   };
 
   const onSelect = data => {
-    history.push("/people/" + data);
-    setValue("");
+    history.push('/people/' + data);
+    setValue('');
   };
 
   return (
@@ -69,8 +69,8 @@ function Searchbar() {
         options={filteredOptions}
         onSelect={onSelect}
         onSearch={onSearch}
-        style={{ width: 200 }}
-        placeholder={"Search for people..."}
+        style={{ minWidth: 100, maxWidth: 400 }}
+        placeholder={'Search for people...'}
         onFocus={fetchPeople}
       />
     </div>

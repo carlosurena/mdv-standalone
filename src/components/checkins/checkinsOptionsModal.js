@@ -26,15 +26,14 @@ function CheckinsOptionsModal(props) {
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const [eventName, setEventName] = useState(null);
+  const [eventId, setEventId] = useState(null);
+  const [eventDate, setEventDate] = useState(new Date);
 
-  const [checkinsValues, setCheckinsValues] = useState({
-    event_type: 'PowerKids Sunday School',
-    event_date: new Date()
-  });
   const [form] = Form.useForm();
   const { Option } = Select;
 
-  const resetState = () => {};
+  const resetState = () => { };
 
   useEffect(() => {
     resetState();
@@ -45,6 +44,8 @@ function CheckinsOptionsModal(props) {
     form.resetFields();
   };
 
+
+
   return (
     <Modal
       visible={props.modalVisibility}
@@ -52,13 +53,15 @@ function CheckinsOptionsModal(props) {
       okText="Start"
       cancelText="Cancel"
       width="80%"
+      okButtonProps={{ disabled: !eventDate ? true : false }}
       onCancel={handleCancel}
       onOk={() => {
         form
           .validateFields()
           .then(values => {
-            console.log('api req here');
-            history.push('/check-ins/station');
+            console.log(eventName, eventDate, props);
+            props.setModalVisibility(false);
+            props.getOrCreateSheet(eventName, moment(eventDate).format("YYYY-MM-DD").toString());
           })
           .then(() => form.resetFields())
           .catch(info => {
@@ -70,19 +73,20 @@ function CheckinsOptionsModal(props) {
         <Input.Group>
           <Row gutter={8}>
             <Col xs={24} sm={12}>
-              <Form.Item name="event_type" label="Event">
+              <Form.Item name="event_name" label="Event">
                 <Select
-                  placeholder="Event"
-                  defaultValue={checkinsValues.event_type}
+                  placeholder="Select Event..."
+                  defaultValue={eventName ? eventName : null}
                   onChange={e => {
-                    console.log('event change');
+                    console.log('event change to ' + e);
+                    setEventName(e)
                   }}
                 >
-                  {mockEvents &&
-                    mockEvents.map(event => {
+                  {props.events &&
+                    props.events.map(event => {
                       return (
-                        <Option key={event.key} value={event.key} label={event.label}>
-                          {event.label}
+                        <Option key={event.event_id} value={event.event_name} label={event.event_name}>
+                          {event.event_name}
                         </Option>
                       );
                     })}
@@ -92,10 +96,10 @@ function CheckinsOptionsModal(props) {
             <Col xs={24} sm={12}>
               <Form.Item name="date" label="Event Date">
                 <DatePicker
-                  defaultValue={moment(checkinsValues.event_date)}
+                  defaultValue={moment(eventDate)}
                   format={dateFormat}
                   onChange={e => {
-                    console.log('date change');
+                    setEventDate(e && e.toDate())
                   }}
                   className="center"
                 />

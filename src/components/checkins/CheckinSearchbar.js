@@ -5,7 +5,7 @@ const mockVal = (str, repeat = 1) => ({
   value: str.repeat(repeat)
 });
 
-function Searchbar(props) {
+function CheckinSearchbar(props) {
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [reshapedOptions, setReshapedOptions] = useState(null);
   const [response, setResponse] = useState([]);
@@ -42,13 +42,13 @@ function Searchbar(props) {
   const filterOptions = query => {
     if (query) {
       const re = new RegExp(query.toUpperCase());
-      setFilteredOptions(
+      props.updateSearchResults(
         reshapedOptions.filter(item => {
           return re.test(item.label.toUpperCase());
         })
       );
     } else {
-      setFilteredOptions([]);
+      props.updateSearchResults(filteredOptions)
     }
   };
 
@@ -70,7 +70,6 @@ function Searchbar(props) {
     <div>
       <AutoComplete
         value={value}
-        options={filteredOptions}
         onSelect={onSelect}
         onSearch={onSearch}
         className="searchbar roundify"
@@ -81,4 +80,4 @@ function Searchbar(props) {
   );
 }
 
-export default Searchbar;
+export default CheckinSearchbar;

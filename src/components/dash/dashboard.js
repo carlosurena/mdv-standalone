@@ -3,20 +3,16 @@ import { Row, Button } from "antd";
 import { colors } from "../common/theme";
 import ContainerPanel from "../common/containerPanel";
 import UpcomingBirthdays from "./upcomingBirthdays";
-import CheckinsOptionsModal from "../checkins/checkinsOptionsModal";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 
 function Dashboard() {
-  const history = useHistory();
   const [modalVisibility, setModalVisibility] = useState(false);
+  const history = useHistory();
   return (
     <Row gutter={[16, 16]} className="container-padding">
-      <CheckinsOptionsModal
-        modalVisibility={modalVisibility}
-        setModalVisibility={setModalVisibility}
-      />
+
       <ContainerPanel background={colors.none} size={1} title="Hi Carlos!">
         {moment().format("dddd, MMMM Do, YYYY")}
       </ContainerPanel>
@@ -24,8 +20,7 @@ function Dashboard() {
       <ContainerPanel background={colors.paleBlue} size={1} noPadding>
         <Button
           onClick={() => {
-            setModalVisibility(true);
-            console.log("modal open");
+            history.push('/check-ins/station');
           }}
           icon={<ArrowRightOutlined />}
           className="dashButton"

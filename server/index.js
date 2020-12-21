@@ -3,14 +3,14 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 const pgp = require('pg-promise')();
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcryptjs');
 const config = require('./config/dbConfig');
 var PropertiesReader = require('properties-reader');
 
 var properties = PropertiesReader('./server/application.properties');
 
 var db = pgp(config.cn);
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5000;
 
 //express
 const express = require('express');
@@ -31,59 +31,59 @@ app.post('/api/login', (req, res) => {
   console.log(req.body.email, req.body.password);
 });
 
-app.post('/api/register', (req, res) => {
-  console.log(req.body.username, req.body.password);
-  const [
-    email,
-    username,
-    password,
-    auth_status,
-    oauth_provider,
-    photourl,
-    person_id,
-    active,
-    last_login_date,
-    created_by,
-    updated_by
-  ] = req.body;
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) {
-      console.log('error generating salt', err);
-    }
-    bcrypt.hash(password, salt, (err, hash) => {
-      if (err) {
-        console.log('error applying hash', err);
-      }
-      db.one(createUser, [
-        email,
-        username,
-        hash,
-        auth_status,
-        oauth_provider,
-        photourl,
-        person_id,
-        active,
-        last_login_date,
-        created_by,
-        updated_by
-      ])
-        .then(data => {
-          console.log(data.user_id); // print new account id;
-          res.send(data.user_id);
-        })
-        .catch(error => {
-          if (error.code === 23505) {
-            //UNIQUE CONSTRAINT VIOLATION
-            console.log('USER ALREADY EXISTS');
-            res.status(400).send(JSON.stringify({ response: 'USER ALREADY EXISTS' }));
-          } else {
-            console.log('ERROR:', error); // print error;
-            res.status(400).send(JSON.stringify({ response: 'ERROR' }));
-          }
-        });
-    });
-  });
-});
+// app.post('/api/register', (req, res) => {
+//   console.log(req.body.username, req.body.password);
+//   const [
+//     email,
+//     username,
+//     password,
+//     auth_status,
+//     oauth_provider,
+//     photourl,
+//     person_id,
+//     active,
+//     last_login_date,
+//     created_by,
+//     updated_by
+//   ] = req.body;
+//   // bcrypt.genSalt(10, (err, salt) => {
+//   //   if (err) {
+//   //     console.log('error generating salt', err);
+//   //   }
+//   //   bcrypt.hash(password, salt, (err, hash) => {
+//   //     if (err) {
+//   //       console.log('error applying hash', err);
+//   //     }
+//   //     db.one(createUser, [
+//   //       email,
+//   //       username,
+//   //       hash,
+//   //       auth_status,
+//   //       oauth_provider,
+//   //       photourl,
+//   //       person_id,
+//   //       active,
+//   //       last_login_date,
+//   //       created_by,
+//   //       updated_by
+//   //     ])
+//   //       .then(data => {
+//   //         console.log(data.user_id); // print new account id;
+//   //         res.send(data.user_id);
+//   //       })
+//   //       .catch(error => {
+//   //         if (error.code === 23505) {
+//   //           //UNIQUE CONSTRAINT VIOLATION
+//   //           console.log('USER ALREADY EXISTS');
+//   //           res.status(400).send(JSON.stringify({ response: 'USER ALREADY EXISTS' }));
+//   //         } else {
+//   //           console.log('ERROR:', error); // print error;
+//   //           res.status(400).send(JSON.stringify({ response: 'ERROR' }));
+//   //         }
+//   //       });
+//   //   });
+//   // });
+// });
 
 //---------------- USER ACCOUNTS ----------------------//
 const getAllUsers = properties.get('user.get.all');

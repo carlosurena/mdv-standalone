@@ -35,7 +35,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "node-env-run server --exec nodemon | pino-colada",
-    "start": "node-env-run server --exec nodemon | pino-colada",
+    "start": "npm install && node-env-run server --exec nodemon | pino-colada",
     "dev": "run-p server start",
     "heroku-postbuild": "cd src && npm install && npm run build"
   },

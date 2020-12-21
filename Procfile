@@ -1,1 +1,1 @@
-web: npm install && node-env-run server --exec nodemon | pino-colada
+web: node-env-run server --exec nodemon | pino-colada

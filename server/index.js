@@ -1,30 +1,30 @@
 //API Code for use with PostgreSQL DB if needed. Might switch back.
-const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 const pgp = require('pg-promise')();
 const bcrypt = require('bcryptjs');
 const config = require('./config/dbConfig');
-require('./config/passport');
 var PropertiesReader = require('properties-reader');
 
 var properties = PropertiesReader('./server/application.properties');
 
 var db = pgp(config.cn);
+const port = process.env.PORT || 3001;
 
+//express
+const express = require('express');
 const app = express();
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(pino);
 // const auth = require('./server/routes/auth');
 // app.use('/auth', auth);
 
-//test req
-app.get('/api/greeting', (req, res) => {
-  const name = req.query.name || 'World';
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-});
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '/../build')));
+
 
 //---------------- AUTHENTICATION/AUTHORIZATION ----------------------//
 app.post('/api/login', (req, res) => {
@@ -218,6 +218,7 @@ const deletePerson = properties.get('person.delete.one');
 //GET: all registered people
 app.get('/api/people', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
+  console.log('all people')
   db.any(getAllPeople)
     .then(function (data) {
       // success;
@@ -375,6 +376,7 @@ const deleteEvent = properties.get('checkins.events.delete.one');
 //GET all events
 app.get('/api/events', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
+  console.log('fetching events')
   console.log(req.body);
   db.any(getAllEvents)
     .then(function (data) {
@@ -676,4 +678,8 @@ app.get('/api/assets/birthdays', (req, res) => {
     });
 });
 
-app.listen(3001, () => console.log('Express server is running on localhost:3001'));
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, '/../build/index.html'));
+});
+
+app.listen(port, () => console.log(`Express server is running on localhost:${port}`));

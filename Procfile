@@ -1,1 +1,1 @@
-web: cd server && npm run server && cd ../src && npm start
+web: npm install && node-env-run server --exec nodemon | pino-colada

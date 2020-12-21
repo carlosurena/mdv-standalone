@@ -4,12 +4,12 @@ const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 const pgp = require('pg-promise')();
 // const bcrypt = require('bcryptjs');
-const config = require('./config/dbConfig');
+//const config = require('/config/dbConfig');
 var PropertiesReader = require('properties-reader');
 
 var properties = PropertiesReader('./server/application.properties');
-
-var db = pgp(config.cn);
+//for heroku
+var db = pgp(process.env.DATABASE_URL);
 const port = process.env.PORT || 5000;
 
 //express

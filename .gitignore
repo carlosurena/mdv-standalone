@@ -27,3 +27,4 @@ yarn-error.log*
 
 package-lock.json
 server/config/dbConfig.js
+.env

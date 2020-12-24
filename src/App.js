@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Login from './components/auth/login';
 import People from './components/people/people';
 import Person from './components/people/person';
@@ -15,14 +15,21 @@ const { Content, Footer } = Layout;
 
 function App() {
   const history = useHistory();
-  let isStation = history.location.pathname == '/check-ins/station' ? true : false;
+  const [station, setStation] = useState(false);
+
+  useEffect(()=>{
+    if(history.location.pathname === '/check-ins/station')
+      setStation(true);
+    else
+      setStation(false);
+  },[history.location.pathname]);
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      {isStation ? null : <Nav />}
+      {station ? null : <Nav />}
 
       <Layout className="site-layout">
-        {isStation ? null : <MainHeader />}
-        <Content className={isStation ? 'station' : ''}>
+        {station ? null : <MainHeader />}
+        <Content className={station ? 'station' : ''}>
           <div className="site-layout-background" style={{ minHeight: 360 }}>
             <Switch>
               <Route path="/login">
@@ -48,7 +55,7 @@ function App() {
             </Switch>
           </div>
         </Content>
-        {isStation ? null : <Footer style={{ textAlign: 'center' }}>Carlos Urena ©2020 Created by Carlos Urena</Footer>}
+        {station ? null : <Footer style={{ textAlign: 'center' }}>Carlos Urena ©2020 Created by Carlos Urena</Footer>}
       </Layout>
     </Layout>
   );

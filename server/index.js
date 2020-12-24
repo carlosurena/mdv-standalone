@@ -4,12 +4,20 @@ const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
 const pgp = require('pg-promise')();
 // const bcrypt = require('bcryptjs');
-//const config = require('/config/dbConfig');
 var PropertiesReader = require('properties-reader');
 
 var properties = PropertiesReader('./server/application.properties');
-//for heroku
-var db = pgp(process.env.DATABASE_URL);
+var db;
+
+//DB CONNECTION
+if(process.env.DB_ENV ==='PROD'){
+  db = pgp(process.env.DATABASE_URL);
+}else{
+  const config = require('./config/dbConfig');
+  db = pgp(config.cn);
+}
+
+//PORT
 const port = process.env.PORT || 5000;
 
 //express
@@ -23,7 +31,9 @@ app.use(pino);
 // app.use('/auth', auth);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '/../build')));
+if(process.env.NODE_ENV === 'PROD'){
+  app.use(express.static(path.join(__dirname, '/../build')));
+}
 
 
 //---------------- AUTHENTICATION/AUTHORIZATION ----------------------//
@@ -31,59 +41,6 @@ app.post('/api/login', (req, res) => {
   console.log(req.body.email, req.body.password);
 });
 
-// app.post('/api/register', (req, res) => {
-//   console.log(req.body.username, req.body.password);
-//   const [
-//     email,
-//     username,
-//     password,
-//     auth_status,
-//     oauth_provider,
-//     photourl,
-//     person_id,
-//     active,
-//     last_login_date,
-//     created_by,
-//     updated_by
-//   ] = req.body;
-//   // bcrypt.genSalt(10, (err, salt) => {
-//   //   if (err) {
-//   //     console.log('error generating salt', err);
-//   //   }
-//   //   bcrypt.hash(password, salt, (err, hash) => {
-//   //     if (err) {
-//   //       console.log('error applying hash', err);
-//   //     }
-//   //     db.one(createUser, [
-//   //       email,
-//   //       username,
-//   //       hash,
-//   //       auth_status,
-//   //       oauth_provider,
-//   //       photourl,
-//   //       person_id,
-//   //       active,
-//   //       last_login_date,
-//   //       created_by,
-//   //       updated_by
-//   //     ])
-//   //       .then(data => {
-//   //         console.log(data.user_id); // print new account id;
-//   //         res.send(data.user_id);
-//   //       })
-//   //       .catch(error => {
-//   //         if (error.code === 23505) {
-//   //           //UNIQUE CONSTRAINT VIOLATION
-//   //           console.log('USER ALREADY EXISTS');
-//   //           res.status(400).send(JSON.stringify({ response: 'USER ALREADY EXISTS' }));
-//   //         } else {
-//   //           console.log('ERROR:', error); // print error;
-//   //           res.status(400).send(JSON.stringify({ response: 'ERROR' }));
-//   //         }
-//   //       });
-//   //   });
-//   // });
-// });
 
 //---------------- USER ACCOUNTS ----------------------//
 const getAllUsers = properties.get('user.get.all');
@@ -678,8 +635,11 @@ app.get('/api/assets/birthdays', (req, res) => {
     });
 });
 
-app.get('*', function (req, res) {
-  res.sendFile(path.join(__dirname, '/../build/index.html'));
-});
+if(process.env.NODE_ENV === 'PROD'){
+  app.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, '/../build/index.html'));
+  });
+}
+
 
 app.listen(port, () => console.log(`Express server is running on localhost:${port}`));

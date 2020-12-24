@@ -18,10 +18,14 @@ function App() {
   const [station, setStation] = useState(false);
 
   useEffect(()=>{
-    if(history.location.pathname === '/check-ins/station')
+    if(history.location.pathname === '/check-ins/station'){
+      console.log("hit station")
       setStation(true);
-    else
+    }
+    else{
+      console.log("left station")
       setStation(false);
+    }
   },[history.location.pathname]);
   return (
     <Layout style={{ minHeight: '100vh' }}>

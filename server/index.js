@@ -9,6 +9,9 @@ var PropertiesReader = require('properties-reader');
 var properties = PropertiesReader('./server/application.properties');
 var db;
 
+console.log("DB Environment: " + process.env.DB_ENV)
+console.log("NODE Environment: " + process.env.NODE_ENV)
+
 //DB CONNECTION
 if(process.env.DB_ENV ==='PROD'){
   db = pgp(process.env.DATABASE_URL);

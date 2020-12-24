@@ -49,12 +49,12 @@ function App() {
                 <Checkins />
               </Route>
               <Route exact path="/check-ins/station">
-                <CheckinStation />
+                <CheckinStation setStation={setStation} />
               </Route>
               <Route path="/people/:id" children={<Person />} />
 
               <Route path="/">
-                <Dashboard />
+                <Dashboard setStation={setStation} />
               </Route>
             </Switch>
           </div>

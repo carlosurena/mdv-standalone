@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import CheckinHeader from './checkinHeader';
 import CheckinContent from './checkinContent';
 import CheckinsOptionsModal from './checkinsOptionsModal'
-import { Button } from 'antd';
 import moment from 'moment'
 
-function CheckinStation() {
+function CheckinStation(props) {
   const [modalVisibility, setModalVisibility] = useState(false);
   const [eventName, setEventName] = useState('');
   const [events, setEvents] = useState(null);
@@ -168,7 +167,7 @@ function CheckinStation() {
         setEventDate={setEventDate}
         getOrCreateSheet={getOrCreateSheet}
       />
-      <CheckinHeader eventName={eventName} eventDate={moment(eventDate).format('MMMM Do YYYY')} />
+      <CheckinHeader setStation={props.setStation} eventName={eventName} eventDate={moment(eventDate).format('MMMM Do YYYY')} />
       <CheckinContent loading={loading} deleteAttendee={deleteAttendee} attendees={attendees} createAttendee={createAttendee} sheet={sheet} eventName={eventName} eventDate={eventDate} setModalVisibility={setModalVisibility} />
     </div>
 

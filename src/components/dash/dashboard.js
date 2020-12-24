@@ -7,8 +7,7 @@ import { ArrowRightOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
 
-function Dashboard() {
-  const [modalVisibility, setModalVisibility] = useState(false);
+function Dashboard(props) {
   const history = useHistory();
   return (
     <Row gutter={[16, 16]} className="container-padding">
@@ -20,6 +19,7 @@ function Dashboard() {
       <ContainerPanel background={colors.paleBlue} size={1} noPadding>
         <Button
           onClick={() => {
+            props.setStation(true);
             history.push('/check-ins/station');
           }}
           icon={<ArrowRightOutlined />}

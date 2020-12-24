@@ -15,7 +15,10 @@ function CheckinHeader(props) {
             <Col>
               <Button
                 className="header-button"
-                onClick={() => history.goBack()}
+                onClick={() => {
+                  props.setStation(false)
+                  history.goBack()
+                  }}
                 type="link"
                 icon={<LeftSquareOutlined />}
                 size="large"

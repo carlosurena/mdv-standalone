@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Spin } from "antd";
 import {
-    BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+    BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
   } from 'recharts';
 
 function Demographics() {
@@ -36,21 +36,22 @@ function Demographics() {
       {loading ? (
         <Spin spinning={loading} delay={500}></Spin>
       ) : response ? (
-        <BarChart
-        width={500}
-        height={300}
-        data={response}
-        margin={{
-          top: 5, right: 30, left: 20, bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="age" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="count" fill="#8884d8" />
-      </BarChart>
+          <ResponsiveContainer width="95%" height={400}>
+            <BarChart
+                data={response}
+                margin={{
+                top: 5, right: 30, left: 20, bottom: 5,
+                }}
+            >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="age" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="count" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        
         ) : (
         "no demographic data"
       )}

@@ -652,7 +652,9 @@ app.get('/api/assets/demographics/age', (req, res) => {
         temp["count"] = age.count;
         transformedData.push(temp)
       })
-      res.send(JSON.stringify(transformedData));
+      console.log(transformedData)
+      res.send(JSON.stringify(transformedData.sort((a, b) => (a.age > b.age) ? 1 : -1)
+      ));
 
     })
     .catch(function (error) {

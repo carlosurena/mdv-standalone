@@ -3,6 +3,7 @@ import { Row, Button } from "antd";
 import { colors } from "../common/theme";
 import ContainerPanel from "../common/containerPanel";
 import UpcomingBirthdays from "./upcomingBirthdays";
+import Demographics from "./demographics";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
@@ -53,7 +54,7 @@ function Dashboard(props) {
       </ContainerPanel>
 
       <ContainerPanel size={1} title="Demographics">
-        Coming Soon...
+          <Demographics />
       </ContainerPanel>
 
       <ContainerPanel size={1} title="Upcoming Birthdays">

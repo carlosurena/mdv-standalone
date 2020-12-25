@@ -623,6 +623,7 @@ app.delete('/api/attendees', (req, res) => {
 //---------------------------------ASSETS------------------------------//
 //------------------------------------------------------------------------//
 const getUpcomingBirthdays = properties.get('query.get.upcomingBirthdays');
+const getAgeDemographics = properties.get('query.get.demographics.age');
 
 //GET: all birthdays in the next month
 app.get('/api/assets/birthdays', (req, res) => {
@@ -637,6 +638,30 @@ app.get('/api/assets/birthdays', (req, res) => {
       console.log('error retrieving birthdays', error);
     });
 });
+
+//GET: Age Demographics - 0-4, 5-12, 13-18, 19-25, 26-35, 36-50, 51+ 
+app.get('/api/assets/demographics/age', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  db.any(getAgeDemographics)
+    .then(function (data) {
+      let transformedData = [];
+      // success;
+      data.forEach( age =>{
+        let temp = {};
+        temp["age"] = age.age;
+        temp["count"] = age.count;
+        transformedData.push(temp)
+      })
+      res.send(JSON.stringify(transformedData));
+
+    })
+    .catch(function (error) {
+      // error;
+      console.log('error retrieving demographics', error);
+    });
+});
+
+//----------------------------------------------------------------------//
 
 if(process.env.NODE_ENV === 'PROD'){
   app.get('*', function (req, res) {

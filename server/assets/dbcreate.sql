@@ -106,6 +106,8 @@ CREATE table mdv_attendee_entries
     updated_by varchar(50) not null
 );
 
+
+insert into mdv_locations (location_name, created_on, created_by, updated_on, updated_by) values ('BRIDGEPORT', CURRENT_TIMESTAMP, 'CURENA', CURRENT_TIMESTAMP, 'CURENA')
 -------------------------------------MYSQL
 CREATE table people
 (

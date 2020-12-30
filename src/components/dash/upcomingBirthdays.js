@@ -36,7 +36,7 @@ function UpcomingBirthdays() {
         response.map(person => {
           return (
             <div key={person.person_id}>
-              {person.first_name}, {moment(person.birthdate).format("MMMM Do")}
+              {person.first_name}, {moment.utc(person.birthdate).format("MMMM Do")}
             </div>
           );
         })

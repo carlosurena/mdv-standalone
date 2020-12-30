@@ -7,21 +7,6 @@ import moment from 'moment';
 
 const dateFormat = 'MM/DD/YYYY';
 
-const mockEvents = [
-  {
-    key: 'PowerKids Sunday School',
-    label: 'PowerKids Sunday School'
-  },
-  {
-    key: 'PowerKids Wednesday',
-    label: 'PowerKids Wednesday'
-  },
-  {
-    key: 'Dscipleship Wednesday',
-    label: 'Massachussets'
-  }
-];
-
 function CheckinsOptionsModal(props) {
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
@@ -53,7 +38,7 @@ function CheckinsOptionsModal(props) {
       okText="Start"
       cancelText="Cancel"
       width="80%"
-      okButtonProps={{ disabled: !eventDate ? true : false }}
+      okButtonProps={{ disabled: (!eventDate || !eventName) ? true : false }}
       onCancel={handleCancel}
       onOk={() => {
         form
@@ -80,7 +65,7 @@ function CheckinsOptionsModal(props) {
                   onChange={e => {
                     console.log('event change to ' + e);
                     setEventName(e)
-                  }}
+                  }} 
                 >
                   {props.events &&
                     props.events.map(event => {

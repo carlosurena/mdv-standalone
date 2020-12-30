@@ -65,7 +65,7 @@ function InfoPanel(props) {
               </Descriptions.Item>
               {personData.birthdate ? (
                 <Descriptions.Item label="Birthday">
-                  {moment(personData.birthdate).format("MMMM Do")}
+                  {moment.utc(personData.birthdate).format("MMMM Do")}
                 </Descriptions.Item>
               ) : null}
 

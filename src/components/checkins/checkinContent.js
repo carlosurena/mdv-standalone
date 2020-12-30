@@ -3,6 +3,7 @@ import CheckinSearchbar from './CheckinSearchbar';
 import { Button, Row, Col } from 'antd';
 import { colors } from '../common/theme';
 import ContainerPanel from '../common/containerPanel';
+import AttendeeList from './attendeeList';
 function CheckinContent(props) {
   const [filteredOptions, setFilteredOptions] = useState([]);
 
@@ -88,6 +89,7 @@ function CheckinContent(props) {
             <CheckinSearchbar updateSearchResults={updateSearchResults} mode="checkin" />
           </Col>
         </Row>
+        <AttendeeList attendees={props.attendees} deleteAttendee={props.deleteAttendee} createAttendee={props.createAttendee}/>
       </Col>
     </Row>
   );

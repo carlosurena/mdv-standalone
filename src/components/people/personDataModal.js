@@ -336,7 +336,7 @@ function PersonDataModal(props) {
                   onChange={e => {
                     setPersonData({
                       ...personData,
-                      birthdate: e.toDate()
+                      birthdate: e && e.toDate()
                     });
                   }}
                   className="center"

@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Spin } from "antd";
 import {
-    BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
   } from 'recharts';
-
-function Demographics() {
+  
+function Attendance() {
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
   const [response, setResponse] = useState([]);
 
   useEffect(() => {
-    fetchDemographics();
+    fetchAttendance();
   }, []);
-  async function fetchDemographics() {
+  async function fetchAttendance() {
     setLoading(true);
-    const res = await fetch("/api/assets/demographics/age");
+    const res = await fetch("/api/assets/attendance");
     res
       .json()
       .then(res => {
@@ -37,20 +37,20 @@ function Demographics() {
         <Spin spinning={loading} delay={500}></Spin>
       ) : response ? (
           <ResponsiveContainer width="95%" height={400}>
-            <BarChart
+            <LineChart
                 data={response}
                 margin={{
                 top: 5, right: 30, left: 20, bottom: 5,
                 }}
             >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="age" />
-                <YAxis />
+                <XAxis dataKey="sheet_date" />
+                <YAxis yAxisId="left" />
+                <YAxis yAxisId="right" orientation="right" />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="females" stackId="a" fill="#8884d8" />
-                <Bar dataKey="males" stackId="a" fill="#82ca9d" />
-            </BarChart>
+                <Line yAxisId="left" type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} />
+            </LineChart>
           </ResponsiveContainer>
         
         ) : (
@@ -60,4 +60,4 @@ function Demographics() {
   );
 }
 
-export default Demographics;
+export default Attendance;

@@ -29,7 +29,7 @@ function CheckinHeader(props) {
               <h1>{props.eventType}</h1>
               <h2>{props.eventDate}</h2>
             </Col>
-            <Button className="header-button" type="link" icon={<PlusSquareOutlined />} size="large" block="true" />
+            <Button onClick={() => props.openPersonDataModal(true)} className="header-button" type="link" icon={<PlusSquareOutlined />} size="large" block="true" />
           </Row>
         </Col>
       </Row>

@@ -4,6 +4,7 @@ import { colors } from "../common/theme";
 import ContainerPanel from "../common/containerPanel";
 import UpcomingBirthdays from "./upcomingBirthdays";
 import Demographics from "./demographics";
+import Attendance from "./attendance";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import moment from "moment";
@@ -46,7 +47,7 @@ function Dashboard(props) {
       </ContainerPanel>
 
       <ContainerPanel size={3} title="Attendance Over Time">
-        Coming Soon...
+        <Attendance />
       </ContainerPanel>
 
       <ContainerPanel size={1} title="Active Members">

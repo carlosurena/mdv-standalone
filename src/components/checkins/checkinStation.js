@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import CheckinHeader from './checkinHeader';
 import CheckinContent from './checkinContent';
-import CheckinsOptionsModal from './checkinsOptionsModal'
+import CheckinsOptionsModal from './checkinsOptionsModal';
+import PersonDataModal from '../people/personDataModal'; 
 import moment from 'moment'
 
 function CheckinStation(props) {
   const [modalVisibility, setModalVisibility] = useState(false);
+  const [isPersonDataModalOpen, togglePersonDataModal] = useState(false);
   const [eventName, setEventName] = useState('');
   const [events, setEvents] = useState(null);
   const [sheet, setSheet] = useState(null);
@@ -167,7 +169,7 @@ function CheckinStation(props) {
         setEventDate={setEventDate}
         getOrCreateSheet={getOrCreateSheet}
       />
-      <CheckinHeader setStation={props.setStation} eventName={eventName} eventDate={moment(eventDate).format('MMMM Do YYYY')} />
+      <CheckinHeader togglePersonDataModal={togglePersonDataModal} setStation={props.setStation} eventName={eventName} eventDate={moment(eventDate).format('MMMM Do YYYY')} />
       <CheckinContent loading={loading} deleteAttendee={deleteAttendee} attendees={attendees} createAttendee={createAttendee} sheet={sheet} eventName={eventName} eventDate={eventDate} setModalVisibility={setModalVisibility} />
     </div>
 

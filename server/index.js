@@ -624,6 +624,8 @@ app.delete('/api/attendees', (req, res) => {
 //------------------------------------------------------------------------//
 const getUpcomingBirthdays = properties.get('query.get.upcomingBirthdays');
 const getAgeDemographics = properties.get('query.get.demographics.age');
+const getAttendance = properties.get('query.get.attendance');
+
 
 //GET: all birthdays in the next month
 app.get('/api/assets/birthdays', (req, res) => {
@@ -646,10 +648,13 @@ app.get('/api/assets/demographics/age', (req, res) => {
     .then(function (data) {
       let transformedData = [];
       // success;
+      console.log(data)
       data.forEach( age =>{
         let temp = {};
         temp["age"] = age.age;
-        temp["count"] = age.count;
+        temp["females"] = age.femalecount;
+        temp["males"] = age.malecount;
+        temp["total"] = age.total;
         transformedData.push(temp)
       })
       console.log(transformedData)
@@ -663,6 +668,19 @@ app.get('/api/assets/demographics/age', (req, res) => {
     });
 });
 
+
+//GET: attendance metrics 
+app.get('/api/assets/attendance', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  db.any(getAttendance)
+    .then(function (data) {
+      res.send(JSON.stringify(data));
+    })
+    .catch(function (error) {
+      // error;
+      console.log('error retrieving attendance', error);
+    });
+});
 //----------------------------------------------------------------------//
 
 if(process.env.NODE_ENV === 'PROD'){
